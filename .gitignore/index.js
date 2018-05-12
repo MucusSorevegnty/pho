@@ -1,3 +1,4 @@
+
 const Discord = require('discord.js')
 var prefix = ("ç");
 const bot = new Discord.Client();
@@ -36,13 +37,15 @@ bot.on("message", function(message) {
         case "help":
             var embede = new Discord.RichEmbed()
                 .setDescription(" Voici la liste des commandes de KetchupBot ! Bot développé par Superyastiquereuros#2049")
-                .addField("Commandes mixtes :rabbit:", "çketchup \n çping \n çrandomblague \n çsay ", true)
-                .addField("Commandes utilitaires :notepad_spiral:", "çavatar \n çhelp \n çprofile", false)
-                .addField("Commandes de modération :hammer:", "çban \n çkick \n çclear \n çsondage", false)
+                .addField("Mixtes :rabbit:", "```fix\n çdiceroll \n çfish \n çhack \n çping \n çrandomblague \n çsay```", true)
+                .addField("Utilitaires :notepad_spiral:", "```fix\nçavatar \n çemojis \n çguild \n çhelp \n çprofile \n çroles \n çseen```", true)
+                .addField("Fun :balloon:", "```fix\nç8ball \n çketchup```", true)
+                .addField("Modération :hammer:", "```fix\nçban \n çkick \n çclear \n çsondage```", true)
+                .addField("A venir :desktop:", "```fix\n çrip```", true)
                 .setFooter("KetchupBot", "https://cdn.discordapp.com/attachments/374596599822680068/442355597367574549/ketchup1.jpg")
                 .setTimestamp()
                 .setColor("0xDF0101")
-            message.channel.sendEmbed(embede)
+            message.channel.send(embede);
         break;
         case "say":
             if(message.member.hasPermission("READ_MESSAGES")) {
@@ -106,15 +109,54 @@ bot.on("message", function(message) {
             "Si l'argent ne fais pas le bonheur, donne le moi.",
             "Pourquoi Mickey Mousse ? Parce que Mario brosse."
             ];
-        
           let reponse = (replys[Math.floor(Math.random() * replys.length)])
            var embedd = new Discord.RichEmbed()
            .setTitle("Blague au hasard")
            .setDescription(reponse)
            .setTimestamp()
            .setColor("0x01DF01");
-           message.channel.sendEmbed(embedd);
+           message.channel.send(embedd);
             break;
+            case "diceroll":
+            let dice = Math.floor((Math.random() * 6) + 1);
+            message.channel.sendMessage(":game_die: **" + message.author.username + "** le dè tombe sur **" + dice +"** :game_die:");
+            break;
+            case "hack":
+            var embedh = new Discord.RichEmbed()
+            .setDescription(":rotating_light: Discord se fait hacker :spy:! :rotating_light:")
+            .setImage("https://i.imgur.com/vDS5tJX.gif")
+            .setColor("0x74DF00");
+            message.channel.sendEmbed(embedh);
+            break;
+            case "8ball":
+            let argsed = message.content.split(" ").slice(1); 
+            let tte = argsed.join(" ")
+            if (!tte){
+            return message.reply("Merci de poser une question. Par exemple `ç8ball Est-ce que les licornes existent` :8ball:")};
+            let replies = ["Oui.", "Non.", "Surement...", "Sans aucun doutes !", "Ce n'est pas à moi de répondre à cette question !", "Tout indique que non.", "Aussi vrai que de dire que licornes existent :unicorn:."];
+            let resultat = (replies[Math.floor(Math.random() * replies.length)])
+            message.channel.sendMessage("| :8ball:" + resultat + " **" + message.author.username + "** :8ball:");
+        break;
+        case "roles":
+        message.channel.sendCode("fix", message.guild.roles.map(r => r.name).lenght > 900 ? "Trop de rôles, impossible de tout afficher" : message.guild.roles.map(r => r.name));
+        break;
+        case "fish":
+        let poissons = ["🦑", "🦐", "🦀", "🐚", "🐙", "🦈", "🐡", "🐠", "🐟", "🐬", "🐋", "🐳", "🐢"];  
+        let peche = Math.floor((Math.random() * poissons.length)); 
+        message.channel.sendMessage("**" + message.author.username + "** viens de pêcher " + poissons[peche] + "!");
+        break;
+        case "guild":
+        var embedg = new Discord.RichEmbed()
+      .setTitle(`${message.guild.name} (${message.guild.id})`)
+      .addField("Membres", message.guild.memberCount, false)
+      .addField("Region :map:", message.guild.region, false)
+      .addField("Date de création :date:", `${message.guild.createdAt.toDateString()}`, false)
+      .addField("Owner :crown:", `${message.guild.owner.user.username}#${message.guild.owner.user.discriminator}`, true)
+      .setColor("F4FA58")
+      .setFooter("Pour voir la liste des rôles faites `çroles` et des émojis: `çemojis` :wink: !")
+if (message.guild.iconURL) embedg.setThumbnail(message.guild.iconURL);
+message.channel.sendEmbed(embedg);
+        break;
         case "ping":
         message.channel.sendMessage('Pong :ping_pong: `' + `${message.createdTimestamp - Date.now()}` + ' ms`');
         break;
@@ -163,8 +205,44 @@ var msgauthor = message.author.id;
           message.channel.sendMessage("Ketchup \n MIAM \n https://cdn.discordapp.com/attachments/439717123858759690/441244738780135424/ketchup1.jpg")
     }
 
+    if (message.content.startsWith(prefix + "seen")) {
+        let huser = message.mentions.users.first() || message.author;
+        let servers = bot.guilds.filter(g => g.members.has(huser.id));
+        var message2 = "```";
+        for (var i = 0; i < servers.map(g => g.name).length; i++) {
+            var temp = (i === 0 ? `Guilds en commun avec ${huser.tag}\n` : "") + (i + 1) + ". " + servers.map(g => g.name)[i] + "\n";
+            if ((message2 + temp).length <= 2000 - 3) {
+                message2 += temp;
+            } else {
+                message2 += "```";
+                message.channel.send(message2);
+                message2 = "```";
+            }
+        }
+        message2 += "```";
+        message.channel.send(message2);
+    }
+
+    if(message.content === prefix + "emojis"){
+        var data = new Discord.RichEmbed()
+        if (message.guild.emojis.array().length === 0) data.addField("Liste des émojis de la guild", "Aucun émoji perssonel n'est présent sur cette guild !", true);
+        else {
+          var emojis = []
+          var emojis2 = []
+          message.guild.emojis.array().map(function(emoje) {
+            if (emojis.join(" ").length <= 950) emojis.push(`${emoje}`);
+            else (emojis2.push(`${emoje}`))
+          })
+          data.setThumbnail
+          data.setColor("0x04B4AE")
+          data.addField("Liste des émojis de la guild", emojis.join(" "), true);
+          if (emojis2.length > 0) data.addField("​", emojis2.join(" "));
+          message.channel.sendEmbed(data);
+  }
+    }
+
     if(message.content.startsWith(prefix + "sondage")) {
-        if(message.author.is = "242220208914300928" || "2633250372710563846"){
+        if(message.member.hasPermission("ADMINISTRATOR")){
         var args = message.content.split("").slice(1);
         var thingToEcho = args.join("")
         var embeds = new Discord.RichEmbed()
@@ -172,24 +250,19 @@ var msgauthor = message.author.id;
         .addField(thingToEcho, "Répondre avec :white_check_mark: ou :x:")
         .setColor("0x5F04B4")
         .setTimestamp()
-        console.log("Nouveau sondage créé.");
-        message.guild.channels.find("name", "sondages").sendEmbed(embeds)
+        message.channel.sendMessage("Nouveau sondage créé avec succès :wink: !");
+        message.guild.channels.find("name", "sondages").send(embeds)
         .then(function (message) {
             message.react("✅")
             message.react("❌")
         }).catch(function(){
         });
     }else{
-        return message.channel.sendMessage("Vous n'avez pas la permission nécessarire à l'utilisation de cette commande.")
+        return message.channel.sendMessage("Vous n'avez pas la permission nécessarire à l'utilisation de cette commande.");
     }
     }
-
-            }
-
-            
+            }   
         }
-    
-    
+);
 
 
-)
