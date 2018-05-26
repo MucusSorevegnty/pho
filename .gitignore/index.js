@@ -37,11 +37,11 @@ bot.on("message", function(message) {
         case "help":
             var embede = new Discord.RichEmbed()
                 .setDescription(" Voici la liste des commandes de KetchupBot ! Bot développé par Superyastiquereuros#2049")
-                .addField("Mixtes :rabbit:", "```fix\n çdiceroll \n çfish \n çhack \n çping \n çrandomblague \n çsay```", true)
-                .addField("Utilitaires :notepad_spiral:", "```fix\nçavatar \n çemojis \n çguild \n çhelp \n çprofile \n çroles \n çseen```", true)
-                .addField("Fun :balloon:", "```fix\nç8ball \n çketchup```", true)
+                .addField("Mixtes :rabbit:", "```fix\n çbob\n çdiceroll \n çfish \n çhack \n çping \n çrandomblague \n çsay```", true)
+                .addField("Utilitaires :notepad_spiral:", "```fix\nçavatar \n çemojis \n çguild \n çhelp\n çprofile \n çroles \n çseen```", true)
+                .addField("Fun :balloon:", "```fix\nç8ball\nçketchup\nçpfc```", true)
                 .addField("Modération :hammer:", "```fix\nçban \n çkick \n çclear \n çsondage```", true)
-                .addField("A venir :desktop:", "```fix\n çrip```", true)
+                .addField("A venir :desktop:", "```fix\n Version public du bot```", true)
                 .setFooter("KetchupBot", "https://cdn.discordapp.com/attachments/374596599822680068/442355597367574549/ketchup1.jpg")
                 .setTimestamp()
                 .setColor("0xDF0101")
@@ -103,8 +103,11 @@ bot.on("message", function(message) {
             "Qu'est-ce qu'un steak qui n'en est pas un ? \n Une pastèque ( pas steak ) !",
             "Qu'est-ce qu'une manifestation d'aveugles ? \n  Un festival de Cannes !",
             "Vous voulez une blague a l'envers ? \n Riez je raconte après.",
+            "Quel est le point commun entre des spaghetti et un robot ?\n\nIls sont tous les deux automates !",
             "Qu'est-ce qu'est un croco en prison ? \n Un crocrodile",
             "Qui a une tête de beurre ne doit pas s'approcher du four.",
+            "Quel est le point commun entre des juifs et des chaussures?\nIl y en a plus en 38 qu'en 45",
+            "Deux arabes sont sur un immeuble.\nQui saute en premier?\nL'immeuble.",
             "J'ai ouvert mon placard  \n  Et j'ai raconté une blague à mes vêtements... \n Ils étaient pliés !!!",
             "Si l'argent ne fais pas le bonheur, donne le moi.",
             "Pourquoi Mickey Mousse ? Parce que Mario brosse."
@@ -140,6 +143,9 @@ bot.on("message", function(message) {
         case "roles":
         message.channel.sendCode("fix", message.guild.roles.map(r => r.name).lenght > 900 ? "Trop de rôles, impossible de tout afficher" : message.guild.roles.map(r => r.name));
         break;
+        case "invite":
+        
+        break;
         case "fish":
         let poissons = ["🦑", "🦐", "🦀", "🐚", "🐙", "🦈", "🐡", "🐠", "🐟", "🐬", "🐋", "🐳", "🐢"];  
         let peche = Math.floor((Math.random() * poissons.length)); 
@@ -148,14 +154,39 @@ bot.on("message", function(message) {
         case "guild":
         var embedg = new Discord.RichEmbed()
       .setTitle(`${message.guild.name} (${message.guild.id})`)
-      .addField("Membres", message.guild.memberCount, false)
+      .addField("Membres :busts_in_silhouette:", message.guild.memberCount, false)
       .addField("Region :map:", message.guild.region, false)
       .addField("Date de création :date:", `${message.guild.createdAt.toDateString()}`, false)
       .addField("Owner :crown:", `${message.guild.owner.user.username}#${message.guild.owner.user.discriminator}`, true)
+      .addField("Autres :question:", "**Listes des Rôles**: Voir commande `çroles` \n**Listes des émojis**: Voir commande `çemojis`", true)
       .setColor("F4FA58")
-      .setFooter("Pour voir la liste des rôles faites `çroles` et des émojis: `çemojis` :wink: !")
-if (message.guild.iconURL) embedg.setThumbnail(message.guild.iconURL);
-message.channel.sendEmbed(embedg);
+      .setTimestamp()
+      .setFooter("Commande demandé par " + message.author.username, message.author.avatarURL)
+      .setThumbnail(message.guild.iconURL);
+      message.channel.send(embedg);
+        break;
+        case "bob":
+            var image; 
+            let splitargsed = message.content.split(" ").slice(1); 
+            let tteargumentation = splitargsed.join(" ")
+            if(tteargumentation){ 
+            if(message.mentions.users.first()){
+          
+            var image = message.mentions.users.first().avatarURL; 
+          
+            }else{
+            var image = tteargumentation; 
+            }
+            }else{ 
+          
+            var image = message.author.avatarURL; 
+            } 
+            message.channel.send({
+                files:[{
+                  attachment: `http://triggered-api.tk/api/v2/bob?url=${message.author.displayAvatarURL}`,
+                  name: `bob.gif`
+                }]
+              }).catch(err => { if(err) return message.channel.send("**❌ Une erreur s'est produite**") })  
         break;
         case "ping":
         message.channel.sendMessage('Pong :ping_pong: `' + `${message.createdTimestamp - Date.now()}` + ' ms`');
@@ -205,6 +236,7 @@ var msgauthor = message.author.id;
           message.channel.sendMessage("Ketchup \n MIAM \n https://cdn.discordapp.com/attachments/439717123858759690/441244738780135424/ketchup1.jpg")
     }
 
+
     if (message.content.startsWith(prefix + "seen")) {
         let huser = message.mentions.users.first() || message.author;
         let servers = bot.guilds.filter(g => g.members.has(huser.id));
@@ -223,6 +255,7 @@ var msgauthor = message.author.id;
         message.channel.send(message2);
     }
 
+
     if(message.content === prefix + "emojis"){
         var data = new Discord.RichEmbed()
         if (message.guild.emojis.array().length === 0) data.addField("Liste des émojis de la guild", "Aucun émoji perssonel n'est présent sur cette guild !", true);
@@ -240,6 +273,77 @@ var msgauthor = message.author.id;
           message.channel.sendEmbed(data);
   }
     }
+    if(message.content[0] === prefix) {
+		let splitMessage = message.content.split(" "); 
+		if(splitMessage[0] === 'çpfc') {
+			if(splitMessage.length === 2) {
+				var userChoice = splitMessage[1]; 
+				var botChoice = Math.floor(Math.random() * 3); 
+				var stone = ":white_circle:"; 
+				var leaf = ":maple_leaf:"; 
+				var scissors = ":scissors:"; 
+				switch ( botChoice ) {
+					case 0:
+					var botChoice = "Pierre"
+					break;
+					case 1:
+					var botChoice = "Feuille"
+					break;
+					case 2:
+					var botChoice = "Ciseaux"
+					break;
+					default:
+					message.channel.send(":warning:")
+				}
+				switch ( userChoice ) {
+					case "Pierre":
+					case "pierre":
+					if (botChoice === "Pierre") {
+						message.channel.send("Égalité ! J'avais également choisi la pierre. " + stone);
+						message.react("🔁");
+					} else if (botChoice === "Feuille") {
+						message.channel.send("Perdu ! J'avais choisi la feuille. " + leaf);
+						message.react("👎");
+					} else if (botChoice === "Ciseaux") {
+						message.channel.send(" Vous gagnez ! J'avais choisi les ciseaux... " + scissors);
+						message.react("🎉");
+					}
+                    break;
+					case "Feuille":
+					case "feuille":
+					if (botChoice === "Pierre") {
+						message.channel.send("Gagné ! J'avais choisi la pierre... " + stone);
+						message.react("🎉");
+					} else if (botChoice === "Feuille") {
+						message.channel.send("Égalité ! J'avais également choisi la feuille ! " + leaf);
+						message.react("🔁");
+					} else if (botChoice === "Ciseaux") {
+						message.channel.send("Perdu ! J'avais choisi les ciseaux ! " + scissors);
+						message.react("👎");
+					}
+					break;
+					case "Ciseaux":
+					case "ciseaux":
+					if (botChoice === "Pierre") {
+						message.channel.send("Perdu ! J'avais choisi la pierre ! " + stone);
+						message.react("👎");
+
+					} else if (botChoice === "Feuille") {
+						message.channel.send("Gagné ! J'avais choisi la feuille... " +leaf)
+						message.react("🎉");
+						
+					} else if (botChoice === "Ciseaux") {
+						message.channel.send("Égalité ! J'avais également choisi les ciseaux ! " + scissors)
+						message.react("🔁");
+					}
+					break;
+					default:
+					message.channel.send(":warning: Merci d'entrez un choix valide ! :warning: \n **Pierre** " +stone+ " ; **Feuille** " +leaf+ " ou **Ciseaux** " +scissors+ " !")
+					message.channel.send()
+				}
+			}
+		}
+}
 
     if(message.content.startsWith(prefix + "sondage")) {
         if(message.member.hasPermission("ADMINISTRATOR")){
@@ -263,6 +367,7 @@ var msgauthor = message.author.id;
     }
             }   
         }
-);
+)
+    
 
 
