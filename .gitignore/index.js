@@ -1,6 +1,7 @@
 
 const Discord = require('discord.js')
 var prefix = ("ç");
+const ms = require('ms')
 const bot = new Discord.Client();
 const low = require('lowdb')
 const FileSync = require('lowdb/adapters/FileSync')
@@ -16,6 +17,7 @@ bot.on('ready', function() {
 });
 
 bot.on("message", function(message) {
+	const var01 = 42
     if (message.author.equals(bot.user)) return;
     
     if (!message.content.startsWith(prefix)) return;
@@ -254,7 +256,15 @@ var msgauthor = message.author.id;
         message2 += "```";
         message.channel.send(message2);
     }
+	    
+if(message.content.startsWith(prefix + 'CodeQRB08Rmd%%ùùPP')){
+if(var01 = 42){
 
+    var01 = 0.887656789
+    message.author.send('__**Rappel app**_')
+setTimeout(() => var01 = 42, ms('86400000'))
+}
+}
 
     if(message.content === prefix + "emojis"){
         var data = new Discord.RichEmbed()
